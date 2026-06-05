@@ -1,0 +1,23 @@
+@import "tailwindcss";
+
+@theme {
+  /* === Deep Emerald Green (Primary) === */
+  --color-primary: #065F46;
+  --color-primary-light: #047857;
+  --color-primary-dark: #064E3B;
+
+  /* === Teal/Mint (Accent) === */
+  --color-accent: #14B8A6;
+  --color-accent-light: #2DD4BF;
+  --color-accent-dark: #0F766E;
+
+  /* === Slate Gray (Text) === */
+  --color-slate: #475569;
+  --color-slate-light: #64748B;
+  --color-slate-dark: #334155;
+}
+
+body {
+  background-color: #ffffff;
+  color: var(--color-slate);
+}
