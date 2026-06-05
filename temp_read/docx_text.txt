@@ -1,0 +1,1282 @@
+Product Requirements Document (PRD)
+
+MasjidLink – Sistem Manajemen Masjid Terintegrasi
+
+Atribut
+
+Detail
+
+Nama Produk
+
+MasjidLink
+
+Versi Dokumen
+
+1.0
+
+Tanggal
+
+Mei 2026
+
+Status
+
+Draft
+
+Penyusun
+
+Thifal Yumna Nazihah
+
+Tipe Dokumen
+
+Blueprint Project PRD
+
+
+
+
+
+Daftar Isi
+
+Ringkasan Eksekutif
+
+Latar Belakang & Problem Statement
+
+Tujuan Produk
+
+Ruang Lingkup Produk
+
+User Personas & Roles
+
+Fitur & Functional Requirements
+
+Non-Functional Requirements
+
+Tech Stack & Arsitektur
+
+UI/UX Requirements
+
+Fitur AI
+
+Integrasi Sistem
+
+Roadmap Pengembangan
+
+Expected Impact & KPI
+
+Risiko & Mitigasi
+
+Glossary
+
+
+
+
+
+1. Ringkasan Eksekutif
+
+MasjidLink adalah platform digital terintegrasi yang dirancang untuk mentransformasi manajemen masjid di Indonesia. Platform ini menggabungkan manajemen program, keuangan syariah berbasis PSAK 109, dan kecerdasan buatan (AI) dalam satu ekosistem yang transparan dan mudah diakses oleh seluruh pemangku kepentingan — pengurus DKM, jamaah, maupun donatur.
+
+
+
+Visi: Mewujudkan ekosistem masjid digital yang modern, amanah, dan memberdayakan umat.
+
+
+
+Misi: Mengintegrasikan manajemen program, transparansi keuangan syariah, dan kecerdasan buatan untuk meningkatkan kepercayaan publik dan dampak sosial masjid.
+
+
+
+Tagline: Masjid yang Transparan, Berdampak, dan Terhubung.
+
+
+
+
+
+2. Latar Belakang & Problem Statement
+
+2.1 Konteks
+
+Masjid merupakan institusi sentral dalam kehidupan sosial dan spiritual masyarakat Muslim Indonesia. Namun, mayoritas masjid masih beroperasi dengan manajemen konvensional yang manual, tidak terdigitalisasi, dan tidak transparan — baik dalam pengelolaan program maupun keuangan.
+
+2.2 Masalah yang Diidentifikasi
+
+#
+
+Masalah
+
+Dampak
+
+1
+
+Manajemen Program Manual
+
+Proposal, approval, hingga laporan pertanggungjawaban (LPJ) masih dikerjakan via kertas atau grup chat — tidak terstruktur, rawan hilang, dan sulit dilacak.
+
+2
+
+Keuangan Tidak Transparan
+
+Laporan keuangan masjid sulit diakses oleh jamaah dan donatur, sehingga menurunkan kepercayaan publik terhadap pengelolaan dana.
+
+3
+
+Jangkauan Jamaah Terbatas
+
+Program masjid tidak terpublikasikan secara sistematis; potensi donatur dan relawan tidak dapat dijangkau secara efektif.
+
+4
+
+Tidak Ada Tracking Dampak
+
+Tidak tersedia data terstruktur mengenai penerima manfaat, tingkat partisipasi jamaah, dan outcome program yang terukur.
+
+2.3 Peluang
+
+Penetrasi smartphone dan internet di Indonesia yang semakin tinggi membuka peluang digitalisasi masjid secara masif.
+
+Ekosistem filantropi Islam (ZISWAF) terus berkembang dan membutuhkan platform yang amanah dan terukur.
+
+Belum ada platform komprehensif yang mengintegrasikan semua aspek manajemen masjid dalam satu sistem.
+
+
+
+
+
+3. Tujuan Produk
+
+3.1 Tujuan Bisnis
+
+Menjadi platform manajemen masjid terkemuka di Indonesia dalam 3 tahun pertama.
+
+Menargetkan 500+ masjid aktif bergabung dalam tahun pertama operasional.
+
+Memfasilitasi penyaluran dana ZISWAF yang transparan senilai minimal Rp 5 miliar dalam tahun pertama.
+
+3.2 Tujuan Produk
+
+Mendigitalisasi seluruh siklus manajemen program masjid (proposal → approval → eksekusi → LPJ).
+
+Menyediakan laporan keuangan syariah real-time yang dapat diakses publik sesuai PSAK 109.
+
+Menghubungkan jamaah dan donatur dengan program masjid secara langsung dan terukur.
+
+Mengintegrasikan AI untuk meningkatkan kualitas pengambilan keputusan DKM dan pengalaman donatur.
+
+3.3 Tujuan Pengguna
+
+Pengurus DKM: Efisiensi administrasi 70%, laporan otomatis, dan data program terstruktur.
+
+Jamaah: Akses mudah ke ratusan program masjid dan keterlibatan komunitas yang bermakna.
+
+Donatur: Kepercayaan penuh melalui transparansi 100%, tracking donasi, dan laporan dampak.
+
+
+
+
+
+4. Ruang Lingkup Produk
+
+4.1 Dalam Lingkup (In-Scope)
+
+Sistem manajemen program masjid (proposal, approval, eksekusi, LPJ)
+
+Modul keuangan syariah (pemasukan ZISWAF, pengeluaran, laporan PSAK 109)
+
+Dashboard analitik untuk pengurus, jamaah, dan donatur
+
+Fitur pencarian masjid dan program berbasis lokasi dan kategori
+
+Sistem donasi online terintegrasi payment gateway
+
+Fitur AI: chatbot DKM, rekomendasi program, prediksi dana, deteksi anomali
+
+Notifikasi via aplikasi dan WhatsApp
+
+Akses publik laporan keuangan via QR Code dan download
+
+4.2 Di Luar Lingkup (Out-of-Scope) – Fase 1
+
+Manajemen sertifikasi halal masjid
+
+Sistem penggajian imam/khatib
+
+Platform e-learning keislaman
+
+Integrasi dengan sistem pemerintah (Kemenag, SIMAS)
+
+Fitur live streaming kajian
+
+
+
+
+
+5. User Personas & Roles
+
+5.1 Pengurus / DKM — Full Access
+
+Deskripsi: Ketua DKM, bendahara, sekretaris, dan panitia program masjid.
+
+
+
+Kebutuhan utama:
+
+
+
+Alat digital untuk mengelola proposal dan persetujuan program secara berjenjang
+
+Dashboard keuangan real-time untuk memantau pemasukan dan pengeluaran
+
+Fitur pembuatan laporan pertanggungjawaban otomatis
+
+Data jamaah dan donatur yang terkelola dengan baik
+
+
+
+Hak akses:
+
+
+
+Kelola proposal & approval program
+
+Input & monitor keuangan masjid
+
+Buat laporan pertanggungjawaban
+
+Akses dashboard analytics
+
+Manajemen data jamaah & donatur
+
+5.2 Jamaah — Read Access
+
+Deskripsi: Anggota komunitas masjid yang ingin berpartisipasi dalam program.
+
+
+
+Kebutuhan utama:
+
+
+
+Menemukan masjid dan program yang sesuai minat dan lokasi
+
+Mendaftar dan mengikuti program secara digital
+
+Mendapatkan notifikasi program terbaru
+
+
+
+Hak akses:
+
+
+
+Cari masjid berdasarkan program/lokasi
+
+Lihat profil & kontribusi masjid
+
+Daftar & ikuti program masjid
+
+Lihat jadwal kegiatan masjid
+
+Notifikasi program baru
+
+5.3 Donatur — Extended Access
+
+Deskripsi: Individu atau lembaga yang mendukung program masjid secara finansial.
+
+
+
+Kebutuhan utama:
+
+
+
+Transparansi penuh atas penggunaan donasi
+
+Tracking dampak donasi secara personal
+
+Rekomendasi program yang relevan dengan minat dan histori donasi
+
+
+
+Hak akses:
+
+
+
+Semua akses jamaah
+
+Lihat laporan keuangan transparan
+
+Tracking penggunaan donasi
+
+Rekomendasi program berbasis AI
+
+Dashboard impact donasi pribadi
+
+
+
+
+
+6. Fitur & Functional Requirements
+
+6.1 Fitur 1: Manajemen Program Masjid
+
+Deskripsi: Sistem workflow digital yang mengelola siklus hidup program masjid secara menyeluruh.
+
+
+
+Alur Proses:
+
+
+
+Proposal → Approval → Eksekusi → LPJ
+
+
+
+Tahap
+
+Aktor
+
+Aktivitas
+
+Proposal
+
+Panitia/DKM
+
+Input digital: tujuan, anggaran, sasaran, timeline
+
+Approval
+
+Ketua DKM
+
+Review dan persetujuan berjenjang
+
+Eksekusi
+
+Panitia
+
+Tracking peserta dan progress real-time
+
+LPJ
+
+Panitia/DKM
+
+Laporan otomatis, bisa diakses publik
+
+
+
+Functional Requirements:
+
+
+
+FR-01: Sistem harus menyediakan form digital untuk pembuatan proposal program dengan field: nama program, tujuan, anggaran yang diajukan, sasaran peserta, timeline, dan penanggung jawab.
+
+FR-02: Sistem harus mendukung alur approval berjenjang (minimal 2 level: panitia → ketua DKM).
+
+FR-03: Sistem harus memungkinkan tracking progress program secara real-time termasuk jumlah peserta terdaftar dan kehadiran.
+
+FR-04: Sistem harus menghasilkan laporan pertanggungjawaban (LPJ) secara otomatis berdasarkan data program yang diinput.
+
+FR-05: LPJ harus dapat diakses publik via tautan dan QR Code.
+
+FR-06: Sistem harus mencatat dan menampilkan Tracking Dampak Real-Time: jumlah penerima manfaat, jamaah yang berpartisipasi, dana terserap, dan rating program.
+
+6.2 Fitur 2: Manajemen Keuangan Syariah
+
+Deskripsi: Modul keuangan yang mencatat pemasukan dan pengeluaran masjid sesuai prinsip akuntansi syariah PSAK 109.
+
+
+
+Sumber Pemasukan yang Didukung:
+
+
+
+Sumber
+
+Keterangan
+
+Zakat
+
+Dana wajib berdasarkan nisab
+
+Infaq
+
+Sumbangan sukarela tidak terikat
+
+Shodaqoh
+
+Sedekah umum
+
+Wakaf
+
+Aset/dana diwakafkan
+
+Hibah
+
+Pemberian dari lembaga/individu
+
+
+
+Functional Requirements:
+
+
+
+FR-07: Sistem harus menyediakan dashboard real-time yang menampilkan total pemasukan, total pengeluaran, saldo akhir, dan saldo dana ZISWAF.
+
+FR-08: Sistem harus memisahkan pencatatan berdasarkan jenis dana (Zakat, Infaq, Shodaqoh, Wakaf, Hibah) sesuai PSAK 109.
+
+FR-09: Sistem harus mendukung alokasi dana otomatis per program yang telah disetujui.
+
+FR-10: Sistem harus menyediakan audit trail untuk setiap transaksi yang diinput.
+
+FR-11: Sistem harus menghasilkan laporan keuangan syariah yang dapat diekspor dalam format PDF dan Excel.
+
+FR-12: Laporan keuangan harus dapat diakses publik dengan fitur download dan QR Code.
+
+FR-13: Sistem harus menampilkan visualisasi data keuangan (grafik pemasukan vs pengeluaran, distribusi sumber dana) secara bulanan.
+
+6.3 Fitur 3: Portal Jamaah & Donatur
+
+Deskripsi: Antarmuka yang memudahkan jamaah dan donatur menemukan dan berinteraksi dengan program masjid.
+
+
+
+Functional Requirements:
+
+
+
+FR-14: Sistem harus menyediakan fitur pencarian masjid berdasarkan nama, lokasi, dan kategori program (Sosial, Pendidikan, Kesehatan, dll.).
+
+FR-15: Setiap masjid harus memiliki halaman profil yang menampilkan informasi masjid, daftar program aktif, dan rating.
+
+FR-16: Halaman detail program harus menampilkan: deskripsi program, statistik dampak (penerima manfaat, dana terkumpul, peserta), alokasi dana, dan tombol donasi/daftar.
+
+FR-17: Donatur harus memiliki dashboard pribadi yang menampilkan: total donasi, program yang didukung, dan jumlah penerima manfaat dari donasi mereka.
+
+FR-18: Sistem harus menampilkan progress bar pencapaian target dana per program.
+
+FR-19: Sistem harus mengirimkan notifikasi kepada jamaah terdaftar untuk program baru dan update program yang diikuti.
+
+6.4 Fitur 4: Dashboard Analytics
+
+Functional Requirements:
+
+
+
+FR-20: Dashboard pengurus harus menampilkan ringkasan status program aktif, proposal menunggu approval, dan peringatan laporan yang belum disubmit.
+
+FR-21: Sistem harus menyediakan data analitik partisipasi jamaah per program dan tren donasi per periode.
+
+FR-22: Dashboard donatur harus menampilkan visualisasi impact donasi pribadi secara agregat.
+
+
+
+
+
+7. Non-Functional Requirements
+
+7.1 Performa
+
+NFR-01: Halaman utama harus memuat dalam waktu ≤ 3 detik pada koneksi 4G.
+
+NFR-02: Sistem harus mampu menangani minimal 10.000 pengguna konkuren.
+
+NFR-03: API response time tidak boleh melebihi 500ms untuk operasi standar.
+
+NFR-04: Uptime sistem minimal 99.5% per bulan (kecuali scheduled maintenance).
+
+7.2 Keamanan
+
+NFR-05: Semua komunikasi harus menggunakan HTTPS/TLS.
+
+NFR-06: Autentikasi menggunakan JWT dengan masa berlaku token yang dapat dikonfigurasi.
+
+NFR-07: Data pengguna harus dienkripsi at-rest dan in-transit.
+
+NFR-08: Sistem harus dilindungi oleh Web Application Firewall (WAF).
+
+NFR-09: Setiap transaksi keuangan harus tercatat dalam audit trail yang tidak dapat dimodifikasi.
+
+7.3 Skalabilitas
+
+NFR-10: Arsitektur sistem harus mendukung horizontal scaling menggunakan container orchestration (Kubernetes).
+
+NFR-11: Database harus mendukung read replica untuk menangani beban baca yang tinggi.
+
+7.4 Aksesibilitas & Kompatibilitas
+
+NFR-12: Aplikasi mobile harus mendukung iOS 14+ dan Android 8+.
+
+NFR-13: Web portal harus responsif dan mendukung browser modern (Chrome, Firefox, Safari, Edge).
+
+NFR-14: Sistem harus mendukung Progressive Web App (PWA) untuk penggunaan offline dasar.
+
+7.5 Privasi Data
+
+NFR-15: Sistem harus mematuhi regulasi perlindungan data pribadi yang berlaku di Indonesia (UU PDP).
+
+NFR-16: Data donatur bersifat privat dan tidak dapat diakses oleh pihak lain tanpa persetujuan.
+
+
+
+
+
+8. Tech Stack & Arsitektur
+
+8.1 Frontend
+
+Komponen
+
+Teknologi
+
+Aplikasi Mobile
+
+React Native (iOS & Android)
+
+Web Portal
+
+Next.js
+
+Styling
+
+TailwindCSS
+
+PWA
+
+Service Worker + Manifest
+
+8.2 Backend
+
+Komponen
+
+Teknologi
+
+Runtime
+
+Node.js
+
+Framework
+
+Express.js / NestJS
+
+API Style
+
+REST API + GraphQL
+
+Autentikasi
+
+JWT
+
+Real-time
+
+WebSocket
+
+8.3 Database & Storage
+
+Komponen
+
+Teknologi
+
+Fungsi
+
+Database Utama
+
+PostgreSQL
+
+Data transaksi, program, pengguna
+
+Caching & Queue
+
+Redis
+
+Session, antrian notifikasi
+
+Push Notification
+
+Firebase
+
+Notifikasi mobile
+
+Document Storage
+
+Amazon S3
+
+Upload dokumen dan media
+
+8.4 AI & Analytics
+
+Komponen
+
+Teknologi
+
+Fungsi
+
+Chatbot DKM
+
+Claude API
+
+Asisten AI untuk pengurus
+
+Prediksi Dana
+
+Python ML
+
+Model prediksi kebutuhan dana
+
+Edge Inference
+
+TensorFlow Lite
+
+Inference di perangkat mobile
+
+BI Dashboard
+
+Metabase
+
+Laporan dan visualisasi data
+
+8.5 Infrastruktur
+
+Komponen
+
+Teknologi
+
+Cloud Provider
+
+AWS / GCP
+
+Containerisasi
+
+Docker + Kubernetes
+
+CI/CD
+
+GitHub Actions
+
+Keamanan
+
+SSL + WAF
+
+8.6 Diagram Arsitektur (High-Level)
+
+┌─────────────────────────────────────────────────────────┐
+
+
+
+│                      CLIENT LAYER                        │
+
+
+
+│    React Native App    │    Next.js Web Portal (PWA)    │
+
+
+
+└────────────┬───────────┴───────────────┬────────────────┘
+
+
+
+             │                           │
+
+
+
+             ▼                           ▼
+
+
+
+┌─────────────────────────────────────────────────────────┐
+
+
+
+│                    API GATEWAY / CDN                     │
+
+
+
+│              (SSL + WAF + Rate Limiting)                 │
+
+
+
+└────────────────────────┬────────────────────────────────┘
+
+
+
+                         │
+
+
+
+         ┌───────────────┼───────────────┐
+
+
+
+         ▼               ▼               ▼
+
+
+
+┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+
+
+
+│  Program     │ │  Keuangan    │ │  AI Service  │
+
+
+
+│  Service     │ │  Service     │ │  (Claude API)│
+
+
+
+└──────┬───────┘ └──────┬───────┘ └──────┬───────┘
+
+
+
+       │                │                │
+
+
+
+       └────────────────┼────────────────┘
+
+
+
+                        ▼
+
+
+
+┌─────────────────────────────────────────────────────────┐
+
+
+
+│                    DATA LAYER                            │
+
+
+
+│  PostgreSQL  │  Redis  │  Firebase  │  Amazon S3        │
+
+
+
+└─────────────────────────────────────────────────────────┘
+
+
+
+
+
+9. UI/UX Requirements
+
+9.1 Halaman Registrasi
+
+UX-01: Pengguna baru harus memilih role (Jamaah / Donatur / Pengurus DKM) sebelum mengisi data pribadi.
+
+UX-02: Role yang aktif dipilih harus ditandai secara visual dengan warna yang berbeda.
+
+UX-03: Setiap role harus memiliki alur onboarding yang berbeda sesuai kebutuhan spesifiknya.
+
+UX-04: Form pendaftaran minimal memerlukan: Nama Lengkap, Email, No. HP, dan Kata Sandi.
+
+9.2 Halaman Login & Dashboard Pengurus
+
+UX-05: Satu halaman login untuk semua role; sistem otomatis mengarahkan ke dashboard sesuai role.
+
+UX-06: Dashboard pengurus menampilkan 4 menu utama: Manajemen Program, Manajemen Keuangan, Analytics Dampak, dan Data Jamaah.
+
+UX-07: Dashboard harus menampilkan notifikasi/peringatan aktif (contoh: "2 proposal baru menunggu approval").
+
+9.3 Dashboard Jamaah
+
+UX-08: Menyediakan search bar untuk mencari masjid/program.
+
+UX-09: Filter program berdasarkan kategori: Semua, Sosial, Pendidikan, Kesehatan.
+
+UX-10: Kartu masjid menampilkan: nama, lokasi, jumlah program aktif, dan rating.
+
+9.4 Dashboard Donatur
+
+UX-11: Menampilkan 3 metrik utama: Total Donasi, Program Didukung, dan Penerima Manfaat.
+
+UX-12: Menampilkan rekomendasi program berbasis AI dengan persentase kesesuaian (contoh: "85% cocok").
+
+9.5 Laporan Keuangan Publik
+
+UX-13: Header laporan menampilkan nama masjid, periode laporan, tombol Download, dan tombol QR Code.
+
+UX-14: Statistik utama ditampilkan dalam 4 kartu: Total Pemasukan, Total Pengeluaran, Saldo Akhir, Dana ZISWAF.
+
+UX-15: Menampilkan grafik batang perbandingan Pemasukan vs Pengeluaran per bulan.
+
+UX-16: Menampilkan pie chart distribusi sumber pemasukan.
+
+9.6 Halaman Detail Program
+
+UX-17: Header program menampilkan nama program, masjid penyelenggara, lokasi, dan status.
+
+UX-18: Menampilkan 4 metrik dampak: Penerima Manfaat, Persentase Dana Terkumpul, Jamaah Berpartisipasi, Sisa Waktu.
+
+UX-19: Menampilkan deskripsi program, jadwal, dan alokasi dana dalam bentuk progress bar.
+
+UX-20: Tombol "Dukung Program" yang menonjol untuk mendorong donasi.
+
+9.7 Panduan Desain (Design Guidelines)
+
+Elemen
+
+Spesifikasi
+
+Warna Primer
+
+Orange (#FF6B35 atau setara)
+
+Warna Sekunder
+
+Hijau (#2E7D32 atau setara)
+
+Warna Aksen
+
+Biru Muda, Ungu, Merah Bata
+
+Background
+
+Navy Dark (#1A2332) untuk header, putih untuk konten
+
+Font
+
+Sans-serif modern (Inter/Poppins)
+
+Bahasa
+
+Bahasa Indonesia
+
+
+
+
+
+10. Fitur AI
+
+10.1 Prediksi Kebutuhan Dana
+
+Deskripsi: AI menganalisis histori program dan pola donasi untuk memprediksi kebutuhan dana di bulan mendatang.
+
+
+
+Kebutuhan:
+
+
+
+Input: historis program (minimal 6 bulan), pola donasi per jenis, kalender event (Ramadan, hari besar Islam)
+
+Output: estimasi kebutuhan dana per kategori program, tingkat kepercayaan prediksi
+
+Diperbarui: setiap minggu atau setiap ada data baru
+
+10.2 Chatbot Asisten DKM
+
+Deskripsi: Asisten AI 24/7 berbasis Claude API yang membantu pengurus menjawab pertanyaan jamaah, menyusun laporan, dan memberikan saran manajemen program.
+
+
+
+Kebutuhan:
+
+
+
+Kemampuan menjawab pertanyaan seputar manajemen program dan keuangan syariah
+
+Kemampuan membantu menyusun draft laporan dan proposal
+
+Konteks percakapan disimpan per sesi
+
+Tersedia dalam Bahasa Indonesia
+
+10.3 Rekomendasi Program untuk Donatur
+
+Deskripsi: Berdasarkan riwayat donasi dan minat donatur, AI merekomendasikan program yang paling relevan.
+
+
+
+Kebutuhan:
+
+
+
+Input: histori donasi donatur, program yang pernah didukung, preferensi kategori
+
+Output: daftar program yang direkomendasikan dengan skor kesesuaian (%)
+
+Algoritma: Collaborative Filtering atau Content-Based Filtering
+
+10.4 Analisis Pola Donasi
+
+Deskripsi: Mendeteksi tren donasi, mengidentifikasi peak period, dan menganalisis demografis donatur.
+
+
+
+Output: Laporan tren donasi mingguan/bulanan untuk membantu strategi fundraising DKM.
+
+10.5 Deteksi Anomali Keuangan
+
+Deskripsi: AI memantau transaksi keuangan masjid secara real-time dan memberi peringatan dini jika ada transaksi yang mencurigakan atau tidak sesuai pola normal.
+
+
+
+Kebutuhan:
+
+
+
+Alert otomatis ke pengurus jika terdeteksi anomali
+
+Log semua anomali yang terdeteksi untuk audit
+
+Threshold anomali dapat dikonfigurasi per masjid
+
+10.6 Sentiment Analysis
+
+Deskripsi: Menganalisis feedback dan komentar jamaah terhadap program masjid untuk mengidentifikasi area yang perlu diperbaiki.
+
+
+
+Kebutuhan:
+
+
+
+Input: rating dan ulasan program dari jamaah
+
+Output: skor sentimen per program, kata kunci utama feedback positif/negatif
+
+
+
+
+
+11. Integrasi Sistem
+
+Sistem
+
+Tujuan
+
+Prioritas
+
+Midtrans Payment Gateway
+
+Pembayaran donasi online
+
+Tinggi
+
+QRIS Integration
+
+Pembayaran via QR Code
+
+Tinggi
+
+WhatsApp Business API
+
+Notifikasi program dan laporan
+
+Tinggi
+
+Claude API (Anthropic)
+
+Chatbot Asisten DKM
+
+Tinggi
+
+Firebase
+
+Push notification mobile
+
+Sedang
+
+Open Data API Publik
+
+Data geolokasi masjid
+
+Sedang
+
+
+
+
+
+12. Roadmap Pengembangan
+
+Sprint Plan – 6 Pekan
+
+Pekan
+
+Fase
+
+Deliverable Utama
+
+Pekan 1
+
+Fondasi & Setup
+
+Setup infrastruktur & repo, desain database schema, auth & role management, wireframe final
+
+Pekan 2
+
+Core Backend
+
+API manajemen program, workflow proposal-approval, modul keuangan dasar, sistem notifikasi
+
+Pekan 3
+
+Frontend Jamaah & Donatur
+
+Halaman registrasi & login, dashboard jamaah & donatur, pencarian masjid & program, detail program & donasi
+
+Pekan 4
+
+Dashboard Pengurus
+
+Manajemen program DKM, input & tracking keuangan, laporan pertanggungjawaban, analytics dashboard
+
+Pekan 5
+
+AI & Akuntansi Syariah
+
+Integrasi modul AI, laporan keuangan syariah PSAK 109, chatbot asisten DKM, rekomendasi program
+
+Pekan 6
+
+Testing & Beta Launch
+
+QA & bug fixing, user acceptance testing (UAT), soft launch beta user, dokumentasi & handover
+
+Milestone Pasca-Beta
+
+Milestone
+
+Target Waktu
+
+Deskripsi
+
+MVP Launch
+
+Bulan 3
+
+Peluncuran publik dengan 10 masjid pilot
+
+Scale-up
+
+Bulan 6
+
+100+ masjid terdaftar, semua fitur AI aktif
+
+Growth Phase
+
+Bulan 12
+
+500+ masjid, integrasi QRIS nasional
+
+
+
+
+
+13. Expected Impact & KPI
+
+13.1 Target Kuantitatif (Tahun Pertama)
+
+KPI
+
+Target
+
+Masjid Tergabung
+
+500+ masjid
+
+Jamaah Aktif
+
+50.000+ pengguna
+
+Donatur Terdaftar
+
+10.000+ donatur
+
+Dana Tersalurkan Transparan
+
+Rp 5 Miliar+
+
+Efisiensi Administrasi DKM
+
+Hemat 70% waktu
+
+13.2 Dampak per Segmen Pengguna
+
+Untuk Pengurus DKM:
+
+
+
+Efisiensi administrasi 70% melalui digitalisasi proposal, approval, dan LPJ.
+
+Laporan keuangan otomatis sesuai PSAK 109 tanpa input manual berulang.
+
+Data program terstruktur untuk pengambilan keputusan berbasis data.
+
+
+
+Untuk Jamaah:
+
+
+
+Akses mudah ke ratusan program masjid dari genggaman.
+
+Keterlibatan komunitas yang lebih bermakna dan terukur.
+
+Notifikasi program relevan sesuai minat dan lokasi.
+
+
+
+Untuk Donatur:
+
+
+
+Kepercayaan meningkat karena transparansi 100% penggunaan dana.
+
+Tracking dampak donasi secara personal dan real-time.
+
+Rekomendasi program yang dipersonalisasi oleh AI.
+
+
+
+Untuk Ekosistem Islam:
+
+
+
+Masjid lebih berdampak dan berfungsi sebagai pusat pemberdayaan umat.
+
+Dana ZISWAF tersalurkan tepat sasaran dan dapat dipertanggungjawabkan.
+
+Ekosistem filantropi Islam berkembang dengan fondasi teknologi yang kuat.
+
+
+
+
+
+14. Risiko & Mitigasi
+
+#
+
+Risiko
+
+Tingkat
+
+Mitigasi
+
+R-01
+
+Adopsi lambat oleh DKM yang kurang melek teknologi
+
+Tinggi
+
+Program onboarding aktif, panduan video, pendampingan langsung pilot masjid
+
+R-02
+
+Keamanan data keuangan dan privasi donatur
+
+Tinggi
+
+Enkripsi end-to-end, audit keamanan reguler, kepatuhan UU PDP
+
+R-03
+
+Kepercayaan terhadap platform baru
+
+Sedang
+
+Endorsement dari lembaga Islam terpercaya, transparansi penuh sistem
+
+R-04
+
+Ketergantungan pada API pihak ketiga (Claude, Midtrans)
+
+Sedang
+
+Arsitektur modular dengan fallback, SLA dengan vendor
+
+R-05
+
+Skalabilitas server saat peak (Ramadan)
+
+Sedang
+
+Auto-scaling Kubernetes, load testing sebelum Ramadan
+
+R-06
+
+Akurasi prediksi AI di tahap awal (data minimal)
+
+Rendah
+
+Model disesuaikan per masjid, disclaimer akurasi kepada pengguna
+
+
+
+
+
+15. Glossary
+
+Istilah
+
+Definisi
+
+DKM
+
+Dewan Kemakmuran Masjid — organisasi pengurus masjid
+
+ZISWAF
+
+Zakat, Infaq, Shodaqoh, dan Wakaf — instrumen keuangan Islam
+
+PSAK 109
+
+Pernyataan Standar Akuntansi Keuangan tentang Akuntansi Zakat dan Infak/Sedekah
+
+LPJ
+
+Laporan Pertanggungjawaban — laporan akhir pelaksanaan program
+
+Jamaah
+
+Anggota komunitas masjid
+
+Donatur
+
+Individu atau lembaga yang memberikan dukungan finansial kepada program masjid
+
+QRIS
+
+Quick Response Code Indonesian Standard — standar QR Code pembayaran nasional
+
+PRD
+
+Product Requirements Document — dokumen spesifikasi kebutuhan produk
+
+MVP
+
+Minimum Viable Product — versi produk dengan fitur minimum yang layak diluncurkan
+
+UAT
+
+User Acceptance Testing — pengujian penerimaan oleh pengguna akhir
+
+JWT
+
+JSON Web Token — standar autentikasi berbasis token
+
+PWA
+
+Progressive Web App — aplikasi web yang dapat berfungsi seperti aplikasi native
+
+WAF
+
+Web Application Firewall — lapisan keamanan untuk aplikasi web
+
+CI/CD
+
+Continuous Integration / Continuous Deployment — praktik otomatisasi pengembangan perangkat lunak
+
+
+
+
+
+
+
+Dokumen ini merupakan Product Requirements Document (PRD) yang disusun berdasarkan Blueprint Project MasjidLink 2026. Dokumen ini bersifat hidup dan akan diperbarui seiring perkembangan produk.
+
+
+
+
+
+
+
+MasjidLink | Masjid yang Transparan, Berdampak, dan Terhubung
+
+
+
