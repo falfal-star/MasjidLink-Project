@@ -1,11 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { createClient } from '../../../../utils/supabase/client';
 import { 
   Bell, Loader2, MessageSquare, Mail, Smartphone, 
-  CheckCheck, Info, Search, ShieldAlert, CheckCircle2,
-  Calendar, Printer, Award, User
+  CheckCheck, Info, Search, Award
 } from 'lucide-react';
 
 interface NotificationLog {
@@ -30,7 +29,7 @@ export default function PengurusNotifikasiPage() {
   const [search, setSearch] = useState('');
   const [filter, setFilter] = useState<'all' | 'whatsapp' | 'email' | 'push'>('all');
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     setLoading(true);
     const { data } = await supabase
       .from('notification_logs')
@@ -43,11 +42,11 @@ export default function PengurusNotifikasiPage() {
       setSelectedLog(fetched[0] ?? null);
     }
     setLoading(false);
-  };
+  }, [supabase, selectedLog]);
 
   useEffect(() => {
     fetchLogs();
-  }, [supabase]);
+  }, [fetchLogs]);
 
   const filteredLogs = logs.filter(log => {
     const matchesFilter = filter === 'all' || log.type === filter;

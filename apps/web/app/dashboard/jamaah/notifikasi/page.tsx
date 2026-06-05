@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { createClient } from '../../../../utils/supabase/client';
 import { 
   Bell, Loader2, MessageSquare, Mail, Smartphone, 
-  CheckCheck, Info, Calendar, ArrowRight, Printer, Award
+  CheckCheck, Info, Printer, Award
 } from 'lucide-react';
 
 interface NotificationLog {
@@ -24,7 +24,7 @@ export default function JamaahNotifikasiPage() {
   const [selectedLog, setSelectedLog] = useState<NotificationLog | null>(null);
   const [filter, setFilter] = useState<'all' | 'whatsapp' | 'email' | 'push'>('all');
 
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     setLoading(true);
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) return;
@@ -40,11 +40,11 @@ export default function JamaahNotifikasiPage() {
       setSelectedLog(data[0] ?? null);
     }
     setLoading(false);
-  };
+  }, [supabase, selectedLog]);
 
   useEffect(() => {
     fetchLogs();
-  }, [supabase]);
+  }, [fetchLogs]);
 
   const filteredLogs = logs.filter(log => filter === 'all' || log.type === filter);
 
