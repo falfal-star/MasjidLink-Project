@@ -28,6 +28,101 @@ const ROLE_OPTIONS: { value: UserRole; label: string }[] = [
   { value: 'super_admin', label: 'Super Admin' },
 ];
 
+interface UserTableRowProps {
+  user: UserRow;
+  roleRow: RoleRow | undefined;
+  isUpdating: boolean;
+  masjids: { id: string; name: string }[];
+  handleAssignMasjid: (userId: string, masjidId: string) => Promise<void>;
+  handleRoleChange: (userId: string, masjidId: string, newRole: UserRole) => Promise<void>;
+}
+
+function UserTableRow({
+  user,
+  roleRow,
+  isUpdating,
+  masjids,
+  handleAssignMasjid,
+  handleRoleChange
+}: UserTableRowProps) {
+  return (
+    <tr className="border-b border-gray-100 last:border-0 hover:bg-slate-50 transition-colors">
+      {/* Pengguna */}
+      <td className="px-6 py-4">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm shrink-0">
+            {(user.full_name ?? 'U').charAt(0).toUpperCase()}
+          </div>
+          <div>
+            <p className="font-semibold text-slate-dark">{user.full_name ?? '—'}</p>
+            <p className="text-xs text-slate-light">{user.phone ?? '—'}</p>
+          </div>
+        </div>
+      </td>
+
+      {/* Masjid */}
+      <td className="px-6 py-4">
+        {roleRow ? (
+          <span className="font-medium text-slate-dark">{roleRow.masjids?.name ?? '—'}</span>
+        ) : (
+          <div className="flex items-center gap-2">
+            <select
+              defaultValue=""
+              onChange={e => handleAssignMasjid(user.id, e.target.value)}
+              className="text-xs border border-gray-200 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary bg-white text-slate-dark"
+              disabled={isUpdating}
+            >
+              <option value="" disabled>Pilih masjid...</option>
+              {masjids.map(m => (
+                <option key={m.id} value={m.id}>{m.name}</option>
+              ))}
+            </select>
+          </div>
+        )}
+      </td>
+
+      {/* Role */}
+      <td className="px-6 py-4">
+        {roleRow ? (
+          <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
+            roleRow.role === 'super_admin' ? 'bg-purple-100 text-purple-700' :
+            roleRow.role === 'ketua_dkm' ? 'bg-blue-100 text-blue-700' :
+            roleRow.role === 'bendahara' ? 'bg-amber-100 text-amber-700' :
+            roleRow.role === 'pengurus' ? 'bg-primary/10 text-primary' :
+            'bg-gray-100 text-gray-600'
+          }`}>
+            {ROLE_OPTIONS.find(r => r.value === roleRow.role)?.label ?? roleRow.role}
+          </span>
+        ) : (
+          <span className="text-xs text-slate-light italic">Belum ditetapkan</span>
+        )}
+      </td>
+
+      {/* Aksi */}
+      <td className="px-6 py-4">
+        {roleRow && (
+          <div className="relative inline-flex items-center gap-1">
+            <select
+              value={roleRow.role}
+              onChange={e => handleRoleChange(user.id, roleRow.masjid_id, e.target.value as UserRole)}
+              disabled={isUpdating}
+              className="text-xs border border-gray-200 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary bg-white text-slate-dark disabled:opacity-50 appearance-none pr-7"
+            >
+              {ROLE_OPTIONS.map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+            {isUpdating
+              ? <Loader2 className="w-3.5 h-3.5 animate-spin text-primary absolute right-2 top-1/2 -translate-y-1/2" />
+              : <ChevronDown className="w-3.5 h-3.5 text-slate-light absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
+            }
+          </div>
+        )}
+      </td>
+    </tr>
+  );
+}
+
 export default function AdminUsersPage() {
   const supabase = createClient();
   const [users, setUsers] = useState<UserRow[]>([]);
@@ -158,87 +253,17 @@ export default function AdminUsersPage() {
               </tr>
             </thead>
             <tbody>
-              {filtered.map(user => {
-                const roleRow = getUserRole(user.id);
-                const isUpdating = updatingId === user.id;
-
-                return (
-                  <tr key={user.id} className="border-b border-gray-100 last:border-0 hover:bg-slate-50 transition-colors">
-                    {/* Pengguna */}
-                    <td className="px-6 py-4">
-                      <div className="flex items-center gap-3">
-                        <div className="w-9 h-9 rounded-full bg-primary/10 text-primary flex items-center justify-center font-bold text-sm shrink-0">
-                          {(user.full_name ?? 'U').charAt(0).toUpperCase()}
-                        </div>
-                        <div>
-                          <p className="font-semibold text-slate-dark">{user.full_name ?? '—'}</p>
-                          <p className="text-xs text-slate-light">{user.phone ?? '—'}</p>
-                        </div>
-                      </div>
-                    </td>
-
-                    {/* Masjid */}
-                    <td className="px-6 py-4">
-                      {roleRow ? (
-                        <span className="font-medium text-slate-dark">{roleRow.masjids?.name ?? '—'}</span>
-                      ) : (
-                        <div className="flex items-center gap-2">
-                          <select
-                            defaultValue=""
-                            onChange={e => handleAssignMasjid(user.id, e.target.value)}
-                            className="text-xs border border-gray-200 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary bg-white text-slate-dark"
-                            disabled={isUpdating}
-                          >
-                            <option value="" disabled>Pilih masjid...</option>
-                            {masjids.map(m => (
-                              <option key={m.id} value={m.id}>{m.name}</option>
-                            ))}
-                          </select>
-                        </div>
-                      )}
-                    </td>
-
-                    {/* Role */}
-                    <td className="px-6 py-4">
-                      {roleRow ? (
-                        <span className={`inline-flex px-3 py-1 rounded-full text-xs font-semibold ${
-                          roleRow.role === 'super_admin' ? 'bg-purple-100 text-purple-700' :
-                          roleRow.role === 'ketua_dkm' ? 'bg-blue-100 text-blue-700' :
-                          roleRow.role === 'bendahara' ? 'bg-amber-100 text-amber-700' :
-                          roleRow.role === 'pengurus' ? 'bg-primary/10 text-primary' :
-                          'bg-gray-100 text-gray-600'
-                        }`}>
-                          {ROLE_OPTIONS.find(r => r.value === roleRow.role)?.label ?? roleRow.role}
-                        </span>
-                      ) : (
-                        <span className="text-xs text-slate-light italic">Belum ditetapkan</span>
-                      )}
-                    </td>
-
-                    {/* Aksi */}
-                    <td className="px-6 py-4">
-                      {roleRow && (
-                        <div className="relative inline-flex items-center gap-1">
-                          <select
-                            value={roleRow.role}
-                            onChange={e => handleRoleChange(user.id, roleRow.masjid_id, e.target.value as UserRole)}
-                            disabled={isUpdating}
-                            className="text-xs border border-gray-200 rounded-xl px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-primary bg-white text-slate-dark disabled:opacity-50 appearance-none pr-7"
-                          >
-                            {ROLE_OPTIONS.map(opt => (
-                              <option key={opt.value} value={opt.value}>{opt.label}</option>
-                            ))}
-                          </select>
-                          {isUpdating
-                            ? <Loader2 className="w-3.5 h-3.5 animate-spin text-primary absolute right-2 top-1/2 -translate-y-1/2" />
-                            : <ChevronDown className="w-3.5 h-3.5 text-slate-light absolute right-2 top-1/2 -translate-y-1/2 pointer-events-none" />
-                          }
-                        </div>
-                      )}
-                    </td>
-                  </tr>
-                );
-              })}
+              {filtered.map(user => (
+                <UserTableRow
+                  key={user.id}
+                  user={user}
+                  roleRow={getUserRole(user.id)}
+                  isUpdating={updatingId === user.id}
+                  masjids={masjids}
+                  handleAssignMasjid={handleAssignMasjid}
+                  handleRoleChange={handleRoleChange}
+                />
+              ))}
             </tbody>
           </table>
         )}
