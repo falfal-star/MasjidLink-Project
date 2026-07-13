@@ -192,22 +192,38 @@ function UserTableRow({
 }
 
 
+interface PendingInvitation {
+  id: string;
+  email: string;
+  role: UserRole;
+  masjid_id: string;
+  masjids: { name: string } | null;
+}
+
 export default function AdminUsersPage() {
   const supabase = createClient();
   const [users, setUsers] = useState<UserRow[]>([]);
   const [roles, setRoles] = useState<RoleRow[]>([]);
   const [masjids, setMasjids] = useState<{ id: string; name: string }[]>([]);
+  const [pendingInvitations, setPendingInvitations] = useState<PendingInvitation[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [message, setMessage] = useState<{ type: 'success' | 'error'; text: string } | null>(null);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
+  // Invite states
+  const [inviteEmail, setInviteEmail] = useState('');
+  const [inviteMasjidId, setInviteMasjidId] = useState('');
+  const [inviteRole, setInviteRole] = useState<UserRole>('ketua_dkm');
+  const [inviting, setInviting] = useState(false);
+
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const [usersRes, rolesRes, masjidsRes] = await Promise.all([
+    const [usersRes, rolesRes, masjidsRes, pendingRes] = await Promise.all([
       supabase.from('users').select('id, full_name, phone, created_at').order('created_at', { ascending: false }),
       supabase.from('user_masjid_roles').select('user_id, masjid_id, role, masjids(name)'),
       supabase.from('masjids').select('id, name').order('name'),
+      supabase.from('pending_invitations').select('id, email, role, masjid_id, masjids(name)').order('created_at', { ascending: false }),
     ]);
     setUsers(usersRes.data ?? []);
     const mappedRoles = (rolesRes.data ?? []).map((r: any) => ({
@@ -218,6 +234,15 @@ export default function AdminUsersPage() {
     }));
     setRoles(mappedRoles as RoleRow[]);
     setMasjids(masjidsRes.data ?? []);
+    
+    const mappedPending = (pendingRes.data ?? []).map((p: any) => ({
+      id: p.id,
+      email: p.email,
+      role: p.role,
+      masjid_id: p.masjid_id,
+      masjids: Array.isArray(p.masjids) ? p.masjids[0] || null : p.masjids || null,
+    }));
+    setPendingInvitations(mappedPending as PendingInvitation[]);
     setLoading(false);
   }, [supabase]);
 
@@ -259,6 +284,37 @@ export default function AdminUsersPage() {
     setUpdatingId(null);
   };
 
+  const handleInvite = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!inviteEmail || !inviteMasjidId || !inviteRole) return;
+    setInviting(true);
+    setMessage(null);
+    const { error } = await supabase.from('pending_invitations').insert({
+      email: inviteEmail.trim().toLowerCase(),
+      masjid_id: inviteMasjidId,
+      role: inviteRole,
+    });
+    if (error) {
+      setMessage({ type: 'error', text: `Gagal mengirim undangan: ${error.message}` });
+    } else {
+      setMessage({ type: 'success', text: `Berhasil mengundang ${inviteEmail}.` });
+      setInviteEmail('');
+      await fetchData();
+    }
+    setInviting(false);
+  };
+
+  const handleCancelInvite = async (inviteId: string) => {
+    setMessage(null);
+    const { error } = await supabase.from('pending_invitations').delete().eq('id', inviteId);
+    if (error) {
+      setMessage({ type: 'error', text: `Gagal membatalkan undangan: ${error.message}` });
+    } else {
+      setMessage({ type: 'success', text: 'Undangan berhasil dibatalkan.' });
+      await fetchData();
+    }
+  };
+
   const filtered = users.filter(u =>
     (u.full_name ?? '').toLowerCase().includes(search.toLowerCase()) ||
     (u.phone ?? '').includes(search)
@@ -285,6 +341,102 @@ export default function AdminUsersPage() {
             ? <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
             : <AlertCircle className="w-5 h-5 text-rose-600 shrink-0" />}
           {message.text}
+        </div>
+      )}
+
+      {/* Form Undang Pengurus */}
+      <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
+        <h2 className="text-lg font-bold text-slate-dark mb-2">Undang Calon Pengurus / Ketua DKM</h2>
+        <p className="text-xs text-slate-light mb-4">
+          Masukkan email calon pengurus. Ketika mereka mendaftar akun dengan email ini, mereka akan langsung otomatis mendapatkan role dan masjid yang Anda tentukan di bawah.
+        </p>
+        <form onSubmit={handleInvite} className="flex flex-wrap gap-4 items-end">
+          <div className="flex-1 min-w-[200px]">
+            <label className="block text-xs font-semibold text-slate-light mb-1">Email Calon Pengurus</label>
+            <input
+              type="email"
+              required
+              placeholder="contoh@email.com"
+              value={inviteEmail}
+              onChange={e => setInviteEmail(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary text-slate-dark bg-white"
+            />
+          </div>
+          <div className="min-w-[200px]">
+            <label className="block text-xs font-semibold text-slate-light mb-1">Masjid</label>
+            <select
+              required
+              value={inviteMasjidId}
+              onChange={e => setInviteMasjidId(e.target.value)}
+              className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary text-slate-dark bg-white"
+            >
+              <option value="" disabled>Pilih masjid...</option>
+              {masjids.map(m => (
+                <option key={m.id} value={m.id}>{m.name}</option>
+              ))}
+            </select>
+          </div>
+          <div className="min-w-[150px]">
+            <label className="block text-xs font-semibold text-slate-light mb-1">Role</label>
+            <select
+              required
+              value={inviteRole}
+              onChange={e => setInviteRole(e.target.value as UserRole)}
+              className="w-full px-4 py-2 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary text-slate-dark bg-white"
+            >
+              {ROLE_OPTIONS.filter(opt => opt.value !== 'super_admin' && opt.value !== 'jamaah').map(opt => (
+                <option key={opt.value} value={opt.value}>{opt.label}</option>
+              ))}
+            </select>
+          </div>
+          <button
+            type="submit"
+            disabled={inviting || !inviteEmail || !inviteMasjidId}
+            className="px-6 py-2 bg-primary hover:bg-primary-dark text-white rounded-xl text-sm font-semibold transition-all disabled:opacity-50 flex items-center gap-2 cursor-pointer h-[38px]"
+          >
+            {inviting && <Loader2 className="w-4 h-4 animate-spin" />}
+            Undang
+          </button>
+        </form>
+      </div>
+
+      {/* Daftar Undangan Pending */}
+      {pendingInvitations.length > 0 && (
+        <div className="bg-white p-6 rounded-3xl shadow-sm border border-gray-100 mb-8">
+          <h2 className="text-lg font-bold text-slate-dark mb-4">Undangan Pending</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b border-gray-100 bg-slate-50">
+                  <th className="text-left px-6 py-3 font-semibold text-slate-light text-xs uppercase tracking-wider">Email</th>
+                  <th className="text-left px-6 py-3 font-semibold text-slate-light text-xs uppercase tracking-wider">Masjid Tujuan</th>
+                  <th className="text-left px-6 py-3 font-semibold text-slate-light text-xs uppercase tracking-wider">Role Rencana</th>
+                  <th className="text-left px-6 py-3 font-semibold text-slate-light text-xs uppercase tracking-wider">Aksi</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pendingInvitations.map(invite => (
+                  <tr key={invite.id} className="border-b border-gray-100 last:border-0 hover:bg-slate-50 transition-colors">
+                    <td className="px-6 py-4 font-semibold text-slate-dark">{invite.email}</td>
+                    <td className="px-6 py-4 text-slate-dark">{invite.masjids?.name ?? '—'}</td>
+                    <td className="px-6 py-4">
+                      <span className="inline-flex px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700">
+                        {ROLE_OPTIONS.find(opt => opt.value === invite.role)?.label ?? invite.role}
+                      </span>
+                    </td>
+                    <td className="px-6 py-4">
+                      <button
+                        onClick={() => handleCancelInvite(invite.id)}
+                        className="text-xs text-rose-600 hover:text-rose-800 font-semibold cursor-pointer"
+                      >
+                        Batalkan
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
 

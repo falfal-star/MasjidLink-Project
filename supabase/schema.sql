@@ -287,11 +287,31 @@ CREATE POLICY "Staff can update donations" ON public.donations
   );
 
 -- ============================================================
--- Trigger: Auto-insert ke public.users saat user baru daftar
+-- Pending Invitations (Undangan Pengurus/DKM Tertunda)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.pending_invitations (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email TEXT UNIQUE NOT NULL,
+  masjid_id UUID REFERENCES public.masjids(id) ON DELETE CASCADE NOT NULL,
+  role TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.pending_invitations ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Super admins can manage pending invitations" ON public.pending_invitations
+  FOR ALL USING (public.is_super_admin());
+
+-- ============================================================
+-- Trigger: Auto-insert ke public.users & assign pending roles
 -- ============================================================
 CREATE OR REPLACE FUNCTION public.handle_new_user()
 RETURNS TRIGGER AS $$
+DECLARE
+  invited_masjid_id UUID;
+  invited_role TEXT;
 BEGIN
+  -- 1. Insert ke public.users
   INSERT INTO public.users (id, full_name, avatar_url)
   VALUES (
     NEW.id,
@@ -299,9 +319,25 @@ BEGIN
     NEW.raw_user_meta_data->>'avatar_url'
   )
   ON CONFLICT (id) DO NOTHING;
+
+  -- 2. Cek apakah email terdaftar di pending_invitations
+  SELECT masjid_id, role INTO invited_masjid_id, invited_role
+  FROM public.pending_invitations
+  WHERE email = NEW.email;
+
+  -- 3. Jika ada, masukkan ke user_masjid_roles & hapus undangan
+  IF invited_masjid_id IS NOT NULL THEN
+    INSERT INTO public.user_masjid_roles (user_id, masjid_id, role)
+    VALUES (NEW.id, invited_masjid_id, invited_role)
+    ON CONFLICT (user_id, masjid_id) DO NOTHING;
+
+    DELETE FROM public.pending_invitations WHERE email = NEW.email;
+  END IF;
+
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
+
 
 DROP TRIGGER IF EXISTS on_auth_user_created ON auth.users;
 CREATE TRIGGER on_auth_user_created
