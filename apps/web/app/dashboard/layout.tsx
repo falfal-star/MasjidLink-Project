@@ -26,6 +26,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const supabase = createClient();
   
   const [userData, setUserData] = useState<UserData | null>(null);
+  const [masjids, setMasjids] = useState<{ id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -48,6 +49,14 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       const role: UserRole = (roleData?.role as UserRole) ?? 'jamaah';
       const masjidsRaw = roleData?.masjids;
       const masjid = (Array.isArray(masjidsRaw) ? masjidsRaw[0] : masjidsRaw) as { name: string } | null;
+
+      if (role === 'super_admin') {
+        const { data: masjidsData } = await supabase
+          .from('masjids')
+          .select('id, name')
+          .order('name');
+        setMasjids(masjidsData ?? []);
+      }
 
       setUserData({
         name: user.user_metadata?.full_name || user.email?.split('@')[0] || 'Jama\'ah',
@@ -94,10 +103,40 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         <Link href="/" className="text-2xl font-bold text-primary mb-2">
           Masjid<span className="text-accent">Link</span>
         </Link>
-        {userData?.masjidName && (
+        {isSuperAdmin ? (
+          <div className="mb-8">
+            <label className="block text-[10px] uppercase font-bold tracking-wider text-slate-light mb-1">Masjid Aktif (Admin)</label>
+            <select
+              value={userData?.masjidId || ''}
+              onChange={async (e) => {
+                const newMasjidId = e.target.value;
+                if (!newMasjidId) return;
+                const { data: { user } } = await supabase.auth.getUser();
+                if (!user) return;
+                
+                const { error } = await supabase
+                  .from('user_masjid_roles')
+                  .update({ masjid_id: newMasjidId })
+                  .eq('user_id', user.id)
+                  .eq('role', 'super_admin');
+                  
+                if (!error) {
+                  window.location.reload();
+                }
+              }}
+              className="w-full text-xs border border-gray-200 rounded-xl px-2 py-1.5 focus:outline-none focus:ring-1 focus:ring-primary bg-white text-slate-dark font-medium"
+            >
+              <option value="" disabled>Pilih masjid...</option>
+              {masjids.map(m => (
+                <option key={m.id} value={m.id}>{m.name}</option>
+              ))}
+            </select>
+          </div>
+        ) : userData?.masjidName ? (
           <p className="text-xs text-slate-light font-medium mb-8 truncate">{userData.masjidName}</p>
+        ) : (
+          <div className="mb-8" />
         )}
-        {!userData?.masjidName && <div className="mb-8" />}
         
         <div className="space-y-6 flex-1 overflow-y-auto">
  
